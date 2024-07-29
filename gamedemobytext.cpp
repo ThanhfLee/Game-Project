@@ -5,15 +5,17 @@
 #include <iomanip>
 #include <algorithm>
 
+using namespace std;
+
 const int BOARD_SIZE = 4;
 
 class Game2048 {
 private:
-    std::vector<std::vector<int>> board;
+    vector<vector<int>> board;
     int score;
 
     void addNewTile() {
-        std::vector<std::pair<int, int>> emptyTiles;
+        vector<pair<int, int>> emptyTiles;
         for (int i = 0; i < BOARD_SIZE; ++i) {
             for (int j = 0; j < BOARD_SIZE; ++j) {
                 if (board[i][j] == 0) {
@@ -32,13 +34,13 @@ private:
         bool moved = false;
         if (direction == 0 || direction == 2) { // Up or Down
             for (int j = 0; j < BOARD_SIZE; ++j) {
-                std::vector<int> column;
+                vector<int> column;
                 for (int i = 0; i < BOARD_SIZE; ++i) {
                     if (board[i][j] != 0) {
                         column.push_back(board[i][j]);
                     }
                 }
-                if (direction == 2) std::reverse(column.begin(), column.end());
+                if (direction == 2) reverse(column.begin(), column.end());
                 for (int i = 1; i < column.size(); ++i) {
                     if (column[i] == column[i-1]) {
                         column[i-1] *= 2;
@@ -47,9 +49,9 @@ private:
                         moved = true;
                     }
                 }
-                column.erase(std::remove(column.begin(), column.end(), 0), column.end());
+                column.erase(remove(column.begin(), column.end(), 0), column.end());
                 while (column.size() < BOARD_SIZE) column.push_back(0);
-                if (direction == 2) std::reverse(column.begin(), column.end());
+                if (direction == 2) reverse(column.begin(), column.end());
                 for (int i = 0; i < BOARD_SIZE; ++i) {
                     if (board[i][j] != column[i]) {
                         board[i][j] = column[i];
@@ -59,13 +61,13 @@ private:
             }
         } else { // Left or Right
             for (int i = 0; i < BOARD_SIZE; ++i) {
-                std::vector<int> row;
+                vector<int> row;
                 for (int j = 0; j < BOARD_SIZE; ++j) {
                     if (board[i][j] != 0) {
                         row.push_back(board[i][j]);
                     }
                 }
-                if (direction == 1) std::reverse(row.begin(), row.end());
+                if (direction == 1) reverse(row.begin(), row.end());
                 for (int j = 1; j < row.size(); ++j) {
                     if (row[j] == row[j-1]) {
                         row[j-1] *= 2;
@@ -74,9 +76,9 @@ private:
                         moved = true;
                     }
                 }
-                row.erase(std::remove(row.begin(), row.end(), 0), row.end());
+                row.erase(remove(row.begin(), row.end(), 0), row.end());
                 while (row.size() < BOARD_SIZE) row.push_back(0);
-                if (direction == 1) std::reverse(row.begin(), row.end());
+                if (direction == 1) reverse(row.begin(), row.end());
                 for (int j = 0; j < BOARD_SIZE; ++j) {
                     if (board[i][j] != row[j]) {
                         board[i][j] = row[j];
@@ -89,19 +91,19 @@ private:
     }
 
 public:
-    Game2048() : board(BOARD_SIZE, std::vector<int>(BOARD_SIZE, 0)), score(0) {
+    Game2048() : board(BOARD_SIZE, vector<int>(BOARD_SIZE, 0)), score(0) {
         srand(time(0));
         addNewTile();
         addNewTile();
     }
 
     void printBoard() {
-        std::cout << "Score: " << score << std::endl;
+        cout << "Score: " << score << endl;
         for (int i = 0; i < BOARD_SIZE; ++i) {
             for (int j = 0; j < BOARD_SIZE; ++j) {
-                std::cout << std::setw(5) << board[i][j];
+                cout << setw(5) << board[i][j];
             }
-            std::cout << std::endl;
+            cout << endl;
         }
     }
 
@@ -138,13 +140,13 @@ int main() {
     char move;
     while (!game.isGameOver()) {
         game.printBoard();
-        std::cout << "Enter move (w/a/s/d): ";
-        std::cin >> move;
+        cout << "Enter move (w/a/s/d): ";
+        cin >> move;
         if (game.makeMove(move)) {
             system("cls"); // Use "cls" for Windows
         }
     }
-    std::cout << "Game Over!" << std::endl;
+    cout << "Game Over!" << endl;
     game.printBoard();
     return 0;
-}]
+}
