@@ -2,6 +2,8 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include <string>
+#include <cstdlib>
+#include <iostream>
 
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 640;
@@ -165,6 +167,23 @@ GameMode handleEvents() {
     return GameMode::HARD;  // Continue in menu
 }
 
+void compileAndRunCpp(const std::string& filename) {
+    std::string compileCommand = "g++ " + filename + " -o temp_game";
+    std::string runCommand = "./temp_game";
+
+    #ifdef _WIN32
+    runCommand = "temp_game.exe";
+    #endif
+
+    int compileResult = system(compileCommand.c_str());
+    if (compileResult == 0) {
+        std::cout << "Compilation successful. Running the game..." << std::endl;
+        system(runCommand.c_str());
+    } else {
+        std::cout << "Compilation failed." << std::endl;
+    }
+}
+
 int main(int argc, char* args[]) {
     if (!init()) {
         printf("Failed to initialize!\n");
@@ -173,7 +192,7 @@ int main(int argc, char* args[]) {
 
     GameMode selectedMode = GameMode::HARD;
     bool quit = false;
-    SDL_Event e;  // Khai báo biến e ở đây
+    SDL_Event e;
 
     while (!quit) {
         while (SDL_PollEvent(&e) != 0) {
@@ -183,9 +202,19 @@ int main(int argc, char* args[]) {
             else if (e.type == SDL_MOUSEBUTTONDOWN) {
                 int mouseX, mouseY;
                 SDL_GetMouseState(&mouseX, &mouseY);
-                if (easyButton.isMouseOver(mouseX, mouseY)) selectedMode = GameMode::EASY;
-                if (mediumButton.isMouseOver(mouseX, mouseY)) selectedMode = GameMode::MEDIUM;
-                if (hardButton.isMouseOver(mouseX, mouseY)) selectedMode = GameMode::HARD;
+                if (easyButton.isMouseOver(mouseX, mouseY)) {
+                    close();  // Đóng SDL trước khi chạy game mới
+                    compileAndRunCpp("src.cpp");
+                    return 0;  // Kết thúc chương trình hiện tại
+                }
+                if (mediumButton.isMouseOver(mouseX, mouseY)) {
+                    selectedMode = GameMode::MEDIUM;
+                    // Xử lý cho chế độ Medium
+                }
+                if (hardButton.isMouseOver(mouseX, mouseY)) {
+                    selectedMode = GameMode::HARD;
+                    // Xử lý cho chế độ Hard
+                }
             }
         }
 
@@ -198,14 +227,8 @@ int main(int argc, char* args[]) {
 
         // Update screen
         SDL_RenderPresent(renderer);
-
-        if (selectedMode != GameMode::HARD) {
-            printf("Selected mode: %d\n", selectedMode);
-            break;
-        }
     }
 
     close();
     return 0;
 }
-// Implement Button class methods here
