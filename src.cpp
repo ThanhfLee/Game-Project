@@ -36,6 +36,7 @@ private:
 	int mWidth;
 	int mHeight;
 };
+
 bool init();
 bool loadMedia();
 void close();
@@ -518,17 +519,17 @@ void handleEvent(SDL_Event* e)
 			inside = false;
 		}
 		//Mouse is right of the button
-		else if (x > 415 + 106)
+		else if (x > 415 + 105)
 		{
 			inside = false;
 		}
 		//Mouse above the button
-		else if (y < 119)
+		else if (y < 120)
 		{
 			inside = false;
 		}
 		//Mouse below the button
-		else if (y > 119 + 34)
+		else if (y > 120 + 30)
 		{
 			inside = false;
 		}
@@ -545,11 +546,11 @@ void handleEvent(SDL_Event* e)
 			switch (e->type)
 			{
 			case SDL_MOUSEMOTION:
-				ButtonDown.render(415, 119);
+				ButtonDown.render(475, 135);
 				break;
 
 			case SDL_MOUSEBUTTONDOWN:
-				ButtonDown.render(415, 119);
+				ButtonDown.render(475, 135);
 				for (int i = 0; i < 4; i++) for (int j = 0; j < 4; j++) board[i][j] = 0;
 				score = 0;
 				randomtile(board, 1);
@@ -560,7 +561,7 @@ void handleEvent(SDL_Event* e)
 				break;
 
 			case SDL_MOUSEBUTTONUP:
-				Button.render(415, 119);
+				Button.render(475, 135);
 				break;
 			}
 		}
