@@ -9,9 +9,9 @@ const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 640;
 
 enum GameMode {
-    EASY,
-    MEDIUM,
-    HARD
+    CLASSIC,
+    UPDATE,
+    COMINGSOON
 };
 
 class Button {
@@ -30,9 +30,9 @@ SDL_Renderer* renderer = nullptr;
 TTF_Font* font = nullptr;
 SDL_Texture* backgroundTexture = nullptr;
 
-Button easyButton(220, 300, 200, 50, "Easy");
-Button mediumButton(220, 370, 200, 50, "Medium");
-Button hardButton(220, 440, 200, 50, "Hard");
+Button classicButton(220, 300, 200, 50, "Classic (4x4)");
+Button updateButton(220, 370, 200, 50, "Update (5x5)");
+Button comingsoonButton(220, 440, 200, 50, "Coming Soon");
 
 void Button::render(SDL_Renderer* renderer, TTF_Font* font) {
     // Vẽ nền của nút
@@ -144,9 +144,9 @@ void renderMenu() {
     SDL_FreeSurface(titleSurface);
     SDL_DestroyTexture(titleTexture);
 
-    easyButton.render(renderer, font);
-    mediumButton.render(renderer, font);
-    hardButton.render(renderer, font);
+    classicButton.render(renderer, font);
+    updateButton.render(renderer, font);
+    comingsoonButton.render(renderer, font);
 
     SDL_RenderPresent(renderer);
 }
@@ -155,16 +155,16 @@ GameMode handleEvents() {
     SDL_Event e;
     while (SDL_PollEvent(&e)) {
         if (e.type == SDL_QUIT) {
-            return GameMode::HARD;  // Quit the game
+            return GameMode::COMINGSOON;  // Quit the game
         } else if (e.type == SDL_MOUSEBUTTONDOWN) {
             int mouseX, mouseY;
             SDL_GetMouseState(&mouseX, &mouseY);
-            if (easyButton.isMouseOver(mouseX, mouseY)) return GameMode::EASY;
-            if (mediumButton.isMouseOver(mouseX, mouseY)) return GameMode::MEDIUM;
-            if (hardButton.isMouseOver(mouseX, mouseY)) return GameMode::HARD;
+            if (classicButton.isMouseOver(mouseX, mouseY)) return GameMode::CLASSIC;
+            if (updateButton.isMouseOver(mouseX, mouseY)) return GameMode::UPDATE;
+            if (comingsoonButton.isMouseOver(mouseX, mouseY)) return GameMode::COMINGSOON;
         }
     }
-    return GameMode::HARD;  // Continue in menu
+    return GameMode::COMINGSOON;  // Continue in menu
 }
 
 void compileAndRunCpp(const std::string& filename) {
@@ -190,7 +190,7 @@ int main(int argc, char* args[]) {
         return 1;
     }
 
-    GameMode selectedMode = GameMode::HARD;
+    GameMode selectedMode = GameMode::COMINGSOON;
     bool quit = false;
     SDL_Event e;
 
@@ -202,18 +202,18 @@ int main(int argc, char* args[]) {
             else if (e.type == SDL_MOUSEBUTTONDOWN) {
                 int mouseX, mouseY;
                 SDL_GetMouseState(&mouseX, &mouseY);
-                if (easyButton.isMouseOver(mouseX, mouseY)) {
+                if (classicButton.isMouseOver(mouseX, mouseY)) {
                     close();  // Đóng SDL trước khi chạy game mới
                     compileAndRunCpp("src.cpp");
                     return 0;  // Kết thúc chương trình hiện tại
                 }
-                if (mediumButton.isMouseOver(mouseX, mouseY)) {
-                    selectedMode = GameMode::MEDIUM;
-                    // Xử lý cho chế độ Medium
+                if (updateButton.isMouseOver(mouseX, mouseY)) {
+                    selectedMode = GameMode::UPDATE;
+                    // Xử lý cho chế độ update
                 }
-                if (hardButton.isMouseOver(mouseX, mouseY)) {
-                    selectedMode = GameMode::HARD;
-                    // Xử lý cho chế độ Hard
+                if (comingsoonButton.isMouseOver(mouseX, mouseY)) {
+                    selectedMode = GameMode::COMINGSOON;
+                    // Xử lý cho 
                 }
             }
         }
