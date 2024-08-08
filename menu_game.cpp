@@ -167,8 +167,10 @@ GameMode handleEvents() {
     return GameMode::COMINGSOON;  // Continue in menu
 }
 
-void compileAndRunCpp(const std::string& filename) {
-    std::string compileCommand = "g++ " + filename + " -o temp_game";
+void compileAndRunCpp(const std::string& filepath) {
+    std::string sdlFlags = "-ID:/CodeBlocks/menu/Project_Game/SDL2/include/SDL2 -LD:/CodeBlocks/menu/Project_Game/SDL2/lib -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -mconsole";
+
+    std::string compileCommand = "g++ " + filepath + " -o temp_game " + sdlFlags;
     std::string runCommand = "./temp_game";
 
     #ifdef _WIN32
@@ -204,7 +206,7 @@ int main(int argc, char* args[]) {
                 SDL_GetMouseState(&mouseX, &mouseY);
                 if (classicButton.isMouseOver(mouseX, mouseY)) {
                     close();  // Đóng SDL trước khi chạy game mới
-                    compileAndRunCpp("src.cpp");
+                    compileAndRunCpp("Project_Game/src.cpp");
                     return 0;  // Kết thúc chương trình hiện tại
                 }
                 if (updateButton.isMouseOver(mouseX, mouseY)) {
@@ -213,7 +215,7 @@ int main(int argc, char* args[]) {
                 }
                 if (comingsoonButton.isMouseOver(mouseX, mouseY)) {
                     selectedMode = GameMode::COMINGSOON;
-                    // Xử lý cho 
+                    // Xử lý cho
                 }
             }
         }
