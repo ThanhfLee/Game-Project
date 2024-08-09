@@ -28,5 +28,5 @@
 - # **ĐANG TRONG GIAI ĐOẠN BỔ SUNG THÊM CÁC CHỨC NĂNG KHÁC**
 
 - + Thêm bảng menu thay đổi mức độ khó của game
-  + Thêm các chức năng đặc biệt trong game nhằng thay đổi yếu tố tiền sử của game
+  + Thêm các chức năng đặc biệt trong game nhằm thay đổi yếu tố tiền sử của game, ví dụ tạo bảng 5x5 cho game
   + v.v...
