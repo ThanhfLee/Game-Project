@@ -7,10 +7,10 @@
 #include <cstdlib>
 #include <iostream>
 #include <ctime>
-#include<vector>
+#include <vector>
 #include <SDL_ttf.h>
 #include <sstream>
-#include<fstream>
+#include <fstream>
 
 using namespace std;
 
@@ -502,7 +502,9 @@ void updateboard(int** board, int** thepreviousboard)
 
 //all the event of new game button
 void handleEvent(SDL_Event* e)
-{
+{int mouseX, mouseY;
+SDL_GetMouseState(&mouseX, &mouseY);
+cout << "Mouse position: " << mouseX << ", " << mouseY << endl;
 	//If mouse event happened
 	if (e->type == SDL_MOUSEMOTION || e->type == SDL_MOUSEBUTTONDOWN || e->type == SDL_MOUSEBUTTONUP)
 	{
@@ -537,7 +539,7 @@ void handleEvent(SDL_Event* e)
 		//Mouse is outside button
 		if (!inside)
 		{
-			Button.render(415, 119);
+			Button.render(400, 100);
 		}
 		//Mouse is inside button
 		else
@@ -546,22 +548,24 @@ void handleEvent(SDL_Event* e)
 			switch (e->type)
 			{
 			case SDL_MOUSEMOTION:
-				ButtonDown.render(475, 135);
+				ButtonDown.render(415, 120);
 				break;
 
 			case SDL_MOUSEBUTTONDOWN:
-				ButtonDown.render(475, 135);
-				for (int i = 0; i < 4; i++) for (int j = 0; j < 4; j++) board[i][j] = 0;
-				score = 0;
-				randomtile(board, 1);
-				randomtile(board, 1);
-				win = false;
-				lose = false;
-				Mix_ResumeMusic();
+                if (e->button.button == SDL_BUTTON_LEFT)
+                {
+                    for (int i = 0; i < 4; i++) for (int j = 0; j < 4; j++) board[i][j] = 0;
+                    score = 0;
+                    randomtile(board, 1);
+                    randomtile(board, 1);
+                    win = false;
+                    lose = false;
+                    Mix_ResumeMusic();
+                }
 				break;
 
 			case SDL_MOUSEBUTTONUP:
-				Button.render(475, 135);
+				Button.render(415, 120);
 				break;
 			}
 		}
@@ -781,6 +785,10 @@ void play()
 						}
 						updateboard(board, thepreviousboard);
 					}
+					else if (e.type == SDL_MOUSEBUTTONDOWN)
+                    {
+                        handleEvent(&e);
+                    }
 				}
 				scoretext.str("");
 				scoretext << score;
@@ -793,7 +801,7 @@ void play()
 				ScoreTexture.loadFromRenderedText(scoretext.str().c_str(), textColor);
 				BestTexture.loadFromRenderedText(bestscoretext.str().c_str(), textColor);
 				gBackgroundTexture.render(0, 0);
-				Button.render(415, 119);
+				Button.render(415, 120);
 				handleEvent(&e);
 				Best.render(418, 33);
 				Score.render(313, 33);
