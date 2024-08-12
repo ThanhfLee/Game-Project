@@ -502,9 +502,7 @@ void updateboard(int** board, int** thepreviousboard)
 
 //all the event of new game button
 void handleEvent(SDL_Event* e)
-{int mouseX, mouseY;
-SDL_GetMouseState(&mouseX, &mouseY);
-cout << "Mouse position: " << mouseX << ", " << mouseY << endl;
+{
 	//If mouse event happened
 	if (e->type == SDL_MOUSEMOTION || e->type == SDL_MOUSEBUTTONDOWN || e->type == SDL_MOUSEBUTTONUP)
 	{
@@ -539,7 +537,7 @@ cout << "Mouse position: " << mouseX << ", " << mouseY << endl;
 		//Mouse is outside button
 		if (!inside)
 		{
-			Button.render(400, 100);
+			Button.render(415, 120);
 		}
 		//Mouse is inside button
 		else
@@ -552,16 +550,14 @@ cout << "Mouse position: " << mouseX << ", " << mouseY << endl;
 				break;
 
 			case SDL_MOUSEBUTTONDOWN:
-                if (e->button.button == SDL_BUTTON_LEFT)
-                {
-                    for (int i = 0; i < 4; i++) for (int j = 0; j < 4; j++) board[i][j] = 0;
-                    score = 0;
-                    randomtile(board, 1);
-                    randomtile(board, 1);
-                    win = false;
-                    lose = false;
-                    Mix_ResumeMusic();
-                }
+                ButtonDown.render(415, 120);
+                for (int i = 0; i < 4; i++) for (int j = 0; j < 4; j++) board[i][j] = 0;
+                score = 0;
+                randomtile(board, 1);
+                randomtile(board, 1);
+                win = false;
+                lose = false;
+                Mix_ResumeMusic();
 				break;
 
 			case SDL_MOUSEBUTTONUP:
@@ -785,7 +781,7 @@ void play()
 						}
 						updateboard(board, thepreviousboard);
 					}
-					else if (e.type == SDL_MOUSEBUTTONDOWN)
+					else if (e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP || e.type == SDL_MOUSEMOTION)
                     {
                         handleEvent(&e);
                     }
