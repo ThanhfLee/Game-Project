@@ -42,7 +42,7 @@ bool loadMedia();
 void close();
 SDL_Window* gWindow = NULL;
 SDL_Renderer* gRenderer = NULL;
-LTexture TextureTile0, TextureTile2, TextureTile4, TextureTile8, TextureTile16, TextureTile32, TextureTile64, TextureTile128, TextureTile256, TextureTile512, TextureTile1024, TextureTile02048;
+LTexture TextureTileHalf, TextureTile1, TextureTile0, TextureTile2, TextureTile4, TextureTile8, TextureTile16, TextureTile32, TextureTile64, TextureTile128, TextureTile256, TextureTile512, TextureTile1024, TextureTile02048;
 LTexture TextureMultiply, TextureDivide;
 LTexture gBackgroundTexture;
 LTexture Button, ButtonDown;
@@ -245,6 +245,8 @@ bool loadMedia()
 
 	//Load Foo' texture
 	TextureTile0.loadFromFile("res/0.png");
+	TextureTile1.loadFromFile("res/1.png");
+    TextureTileHalf.loadFromFile("res/1%2.png");
 	TextureTile2.loadFromFile("res/2.png");
 	TextureTile4.loadFromFile("res/4.png");
 	TextureTile8.loadFromFile("res/8.png");
@@ -312,6 +314,8 @@ void close()
 //Create random tile in virtual board
 const int MULTIPLY_TILE = -1;
 const int DIVIDE_TILE = -2;
+const int ONE_TILE = -3;
+const int HALF_TILE = -4;
 
 void randomtile(int** board, int check)
 {
@@ -322,15 +326,15 @@ void randomtile(int** board, int check)
     if (check == 0)
     {
         int random = rand() % 100;
-        if (random < 80) // 80% cơ hội cho ô thông thường
+        if (random < 70) // 70% cơ hội cho ô thông thường
         {
             value = (rand() % 2 == 0) ? 2 : 4;
         }
-        else if (random < 90) // 10% cơ hội cho ô nhân
+        else if (random < 85) // 15% cơ hội cho ô nhân
         {
             value = MULTIPLY_TILE;
         }
-        else // 10% cơ hội cho ô chia
+        else // 15% cơ hội cho ô chia
         {
             value = DIVIDE_TILE;
         }
@@ -360,40 +364,59 @@ void randomtile(int** board, int check)
         }
     }
 }
-
 //Load Tile in virtual board to real board in window
 void renderTile(int value,int i,int j)
 {
 	switch (value)
 	{
 	case 0:
-	    TextureTile0.render(131 + 97 * i, 198 + 97 * j); break;
+	    TextureTile0.render(131 + 97 * i, 198 + 97 * j);
+	    break;
 	case 2:
-	    TextureTile2.render(131 + 97 * i, 198 + 97 * j); break;
+	    TextureTile2.render(131 + 97 * i, 198 + 97 * j);
+	    break;
 	case 4:
-	    TextureTile4.render(131 + 97 * i, 198 + 97 * j); break;
+	    TextureTile4.render(131 + 97 * i, 198 + 97 * j);
+	    break;
 	case 8:
-	    TextureTile8.render(131 + 97 * i, 198 + 97 * j); break;
+	    TextureTile8.render(131 + 97 * i, 198 + 97 * j);
+	    break;
 	case 16:
-	    TextureTile16.render(131 + 97 * i, 198 + 97 * j); break;
+	    TextureTile16.render(131 + 97 * i, 198 + 97 * j);
+	    break;
 	case 32:
-	    TextureTile32.render(131 + 97 * i, 198 + 97 * j); break;
+	    TextureTile32.render(131 + 97 * i, 198 + 97 * j);
+	    break;
 	case 64:
-	    TextureTile64.render(131 + 97 * i, 198 + 97 * j); break;
+	    TextureTile64.render(131 + 97 * i, 198 + 97 * j);
+	    break;
 	case 128:
-	    TextureTile128.render(131 + 97 * i, 198 + 97 * j); break;
+	    TextureTile128.render(131 + 97 * i, 198 + 97 * j);
+	    break;
 	case 256:
-	    TextureTile256.render(131 + 97 * i, 198 + 97 * j); break;
+	    TextureTile256.render(131 + 97 * i, 198 + 97 * j);
+	    break;
 	case 512:
-	    TextureTile512.render(131 + 97 * i, 198 + 97 * j); break;
+	    TextureTile512.render(131 + 97 * i, 198 + 97 * j);
+	    break;
 	case 1024:
-	    TextureTile1024.render(131 + 97 * i, 198 + 97 * j); break;
+	    TextureTile1024.render(131 + 97 * i, 198 + 97 * j);
+	    break;
 	case 2048:
-	    TextureTile02048.render(131 + 97 * i, 198 + 97 * j); break;
+	    TextureTile02048.render(131 + 97 * i, 198 + 97 * j);
+	    break;
 	case MULTIPLY_TILE:
-        TextureMultiply.render(131 + 97 * i, 198 + 97 * j); break;
+        TextureMultiply.render(131 + 97 * i, 198 + 97 * j);
+        break;
     case DIVIDE_TILE:
-        TextureDivide.render(131 + 97 * i, 198 + 97 * j); break;
+        TextureDivide.render(131 + 97 * i, 198 + 97 * j);
+        break;
+    case ONE_TILE:
+        TextureTile1.render(131 + 97 * i, 198 + 97 * j);
+        break;
+    case HALF_TILE:
+        TextureTileHalf.render(131 + 97 * i, 198 + 97 * j);
+        break;
 	}
 }
 
@@ -418,13 +441,25 @@ void push(vector <int>& notmain, int &scorepermove)
             {
                 if (notmain[j] != 0 && notmain[j] != MULTIPLY_TILE && notmain[j] != DIVIDE_TILE)
                 {
-                    notmain[j] = (notmain[j] == 2) ? 1 : notmain[j] / 2;
+                    if (notmain[j] == 2)
+                    {
+                        notmain[j] = ONE_TILE;
+                    }
+                    else if (notmain[j] == 1 || notmain[j] == ONE_TILE)
+                    {
+                        notmain[j] = HALF_TILE;
+                    }
+                    else
+                    {
+                        notmain[j] /= 2;
+                    }
                     notmain[i] = 0;
                     break;
                 }
             }
             else if ((notmain[i] == notmain[j]) && (notmain[i] != 0) &&
-                     (notmain[i] != MULTIPLY_TILE) && (notmain[i] != DIVIDE_TILE))
+                     (notmain[i] != MULTIPLY_TILE) && (notmain[i] != DIVIDE_TILE) &&
+                     (notmain[i] != ONE_TILE) && (notmain[i] != HALF_TILE))
             {
                 notmain[i] = notmain[i] * 2;
                 scorepermove += notmain[i];
@@ -435,8 +470,8 @@ void push(vector <int>& notmain, int &scorepermove)
         }
     }
 
-    // Đẩy các ô về một bên (giữ nguyên phần này)
-    for (int k = 0; k < 2; k++) // Lặp hai lần để đảm bảo tất cả các ô 0 được đẩy về cuối
+    // Đẩy các ô về một bên
+    for (int k = 0; k < 2; k++)
     {
         for (int i = 0; i < 4; i++)
         {
