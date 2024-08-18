@@ -43,6 +43,7 @@ void close();
 SDL_Window* gWindow = NULL;
 SDL_Renderer* gRenderer = NULL;
 LTexture TextureTile0, TextureTile2, TextureTile4, TextureTile8, TextureTile16, TextureTile32, TextureTile64, TextureTile128, TextureTile256, TextureTile512, TextureTile1024, TextureTile02048;
+LTexture TextureMultiply, TextureDivide;
 LTexture gBackgroundTexture;
 LTexture Button, ButtonDown;
 LTexture ScoreTexture, BestTexture;
@@ -255,6 +256,8 @@ bool loadMedia()
 	TextureTile512.loadFromFile("res/512.png");
 	TextureTile1024.loadFromFile("res/1024.png");
 	TextureTile02048.loadFromFile("res/2048.png");
+	TextureMultiply.loadFromFile("res/X.png");
+    TextureDivide.loadFromFile("res/%.png");
 	youwin.loadFromFile("res/youwin.png");
 	youlose.loadFromFile("res/youlose.png");
 	gBackgroundTexture.loadFromFile("res/background.png");
@@ -307,36 +310,55 @@ void close()
 }
 
 //Create random tile in virtual board
+const int MULTIPLY_TILE = -1;
+const int DIVIDE_TILE = -2;
+
 void randomtile(int** board, int check)
 {
-	int count = 0;
-	srand(time(NULL));
-	int value;
-	if (check == 0)
-	{
-		value = (rand() % (4 - 1 + 1) + 1);
-		if (value == 4) value = 4;
-		else value = 2;
-	}
-	else value = 2;
-	for (int i = 0; i < 4; i++)
-	{
-		for (int j = 0; j < 4; j++)
-		{
-			if (board[i][j] == 0) count++;
-		}
-	}
-	int res = rand() % count;
-	for (int i = 0; i < 4; i++)
-	{
-		for (int j = 0; j < 4; j++)
-		{
-			if (board[i][j] == 0) {
-				if (res == 0) { board[i][j] = value; res = -1; }
-				else res--;
-			}
-		}
-	}
+    int count = 0;
+    srand(time(NULL));
+    int value;
+
+    if (check == 0)
+    {
+        int random = rand() % 100;
+        if (random < 80) // 80% cơ hội cho ô thông thường
+        {
+            value = (rand() % 2 == 0) ? 2 : 4;
+        }
+        else if (random < 90) // 10% cơ hội cho ô nhân
+        {
+            value = MULTIPLY_TILE;
+        }
+        else // 10% cơ hội cho ô chia
+        {
+            value = DIVIDE_TILE;
+        }
+    }
+    else
+    {
+        value = 2;
+    }
+
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            if (board[i][j] == 0) count++;
+        }
+    }
+
+    int res = rand() % count;
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            if (board[i][j] == 0) {
+                if (res == 0) { board[i][j] = value; res = -1; }
+                else res--;
+            }
+        }
+    }
 }
 
 //Load Tile in virtual board to real board in window
@@ -344,57 +366,87 @@ void renderTile(int value,int i,int j)
 {
 	switch (value)
 	{
-	case 0: TextureTile0.render(131 + 97 * i, 198 + 97 * j); break;
-	case 2: TextureTile2.render(131 + 97 * i, 198 + 97 * j); break;
-	case 4: TextureTile4.render(131 + 97 * i, 198 + 97 * j); break;
-	case 8: TextureTile8.render(131 + 97 * i, 198 + 97 * j); break;
-	case 16: TextureTile16.render(131 + 97 * i, 198 + 97 * j); break;
-	case 32: TextureTile32.render(131 + 97 * i, 198 + 97 * j); break;
-	case 64: TextureTile64.render(131 + 97 * i, 198 + 97 * j); break;
-	case 128: TextureTile128.render(131 + 97 * i, 198 + 97 * j); break;
-	case 256: TextureTile256.render(131 + 97 * i, 198 + 97 * j); break;
-	case 512: TextureTile512.render(131 + 97 * i, 198 + 97 * j); break;
-	case 1024: TextureTile1024.render(131 + 97 * i, 198 + 97 * j); break;
-	case 2048: TextureTile02048.render(131 + 97 * i, 198 + 97 * j); break;
+	case 0:
+	    TextureTile0.render(131 + 97 * i, 198 + 97 * j); break;
+	case 2:
+	    TextureTile2.render(131 + 97 * i, 198 + 97 * j); break;
+	case 4:
+	    TextureTile4.render(131 + 97 * i, 198 + 97 * j); break;
+	case 8:
+	    TextureTile8.render(131 + 97 * i, 198 + 97 * j); break;
+	case 16:
+	    TextureTile16.render(131 + 97 * i, 198 + 97 * j); break;
+	case 32:
+	    TextureTile32.render(131 + 97 * i, 198 + 97 * j); break;
+	case 64:
+	    TextureTile64.render(131 + 97 * i, 198 + 97 * j); break;
+	case 128:
+	    TextureTile128.render(131 + 97 * i, 198 + 97 * j); break;
+	case 256:
+	    TextureTile256.render(131 + 97 * i, 198 + 97 * j); break;
+	case 512:
+	    TextureTile512.render(131 + 97 * i, 198 + 97 * j); break;
+	case 1024:
+	    TextureTile1024.render(131 + 97 * i, 198 + 97 * j); break;
+	case 2048:
+	    TextureTile02048.render(131 + 97 * i, 198 + 97 * j); break;
+	case MULTIPLY_TILE:
+        TextureMultiply.render(131 + 97 * i, 198 + 97 * j); break;
+    case DIVIDE_TILE:
+        TextureDivide.render(131 + 97 * i, 198 + 97 * j); break;
 	}
 }
 
 //Push tiles in virtual board
-void push(vector <int>& notmain,int &scorepermove)
+void push(vector <int>& notmain, int &scorepermove)
 {
-	for (int i = 0; i < 4; i++)
-	{
-		for (int j = i + 1; j < 4; j++)
-		{
-			if ((notmain[i] == notmain[j]) && (notmain[i] != 0))
-			{
-				notmain[i] = notmain[i] * 2;
-				scorepermove += notmain[i];
-				notmain[j] = 0;
-				break;
-			}
-			else
-				if (notmain[j] != 0) break;
-		}
-	}
-	for (int i = 0; i < 4; i++)
-	{
-		if (notmain[i] == 0)
-		{
-			notmain.erase(notmain.begin() + i);
-			int temp = 0;
-			notmain.push_back(temp);
-		}
-	}
-	for (int i = 0; i < 4; i++)
-	{
-		if (notmain[i] == 0)
-		{
-			notmain.erase(notmain.begin() + i);
-			int temp = 0;
-			notmain.push_back(temp);
-		}
-	}
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = i + 1; j < 4; j++)
+        {
+            if (notmain[i] == MULTIPLY_TILE)
+            {
+                if (notmain[j] != 0 && notmain[j] != MULTIPLY_TILE && notmain[j] != DIVIDE_TILE)
+                {
+                    notmain[j] *= 2;
+                    scorepermove += notmain[j];
+                    notmain[i] = 0;
+                    break;
+                }
+            }
+            else if (notmain[i] == DIVIDE_TILE)
+            {
+                if (notmain[j] != 0 && notmain[j] != MULTIPLY_TILE && notmain[j] != DIVIDE_TILE)
+                {
+                    notmain[j] = (notmain[j] == 2) ? 1 : notmain[j] / 2;
+                    notmain[i] = 0;
+                    break;
+                }
+            }
+            else if ((notmain[i] == notmain[j]) && (notmain[i] != 0) &&
+                     (notmain[i] != MULTIPLY_TILE) && (notmain[i] != DIVIDE_TILE))
+            {
+                notmain[i] = notmain[i] * 2;
+                scorepermove += notmain[i];
+                notmain[j] = 0;
+                break;
+            }
+            else if (notmain[j] != 0) break;
+        }
+    }
+
+    // Đẩy các ô về một bên (giữ nguyên phần này)
+    for (int k = 0; k < 2; k++) // Lặp hai lần để đảm bảo tất cả các ô 0 được đẩy về cuối
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            if (notmain[i] == 0)
+            {
+                notmain.erase(notmain.begin() + i);
+                notmain.push_back(0);
+            }
+        }
+    }
 }
 
 void moveright(int** board,int &scorepermove)
