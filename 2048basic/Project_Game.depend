@@ -1,0 +1,48 @@
+# depslib dependency file v1.0
+1722793184 source:c:\program files\codeblocks\project_game\src.cpp
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_mixer.h>
+	<stdio.h>
+	<string>
+	<cstdlib>
+	<iostream>
+	<ctime>
+	<vector>
+	<SDL_ttf.h>
+	<sstream>
+	<fstream>
+
+1722794464 source:c:\program files\codeblocks\project_game\menu.cpp
+	<SDL.h>
+	<SDL_ttf.h>
+	<iostream>
+
+1723046668 source:d:\codeblocks\project_game\src.cpp
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_mixer.h>
+	<stdio.h>
+	<string>
+	<cstdlib>
+	<iostream>
+	<ctime>
+	<vector>
+	<SDL_ttf.h>
+	<sstream>
+	<fstream>
+
+1723046668 source:d:\codeblocks\menu\project_game\src.cpp
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_mixer.h>
+	<stdio.h>
+	<string>
+	<cstdlib>
+	<iostream>
+	<ctime>
+	<vector>
+	<SDL_ttf.h>
+	<sstream>
+	<fstream>
+
