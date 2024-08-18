@@ -45,4 +45,5 @@
  # **DỰ KIẾN BỔ SUNG THÊM CÁC CHỨC NĂNG KHÁC**
  + Có thể thêm menu chọn trực tiếp thay đổi chế độ của game
  + Thêm các chức năng đặc biệt trong game nhằm thay đổi yếu tố tiền sử của game, ví dụ tạo bảng 8x8 cho game
+ + Tăng thêm giới hạn của game không chỉ dừng lại ở con số 2048
  + v.v...
